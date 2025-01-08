@@ -1,0 +1,11 @@
+<!-- renders one recipe, referenced in both user ands index.html templates -->
+<table>
+    <tr valign="top">
+        <td>
+            <h4>{{ recipe.name }}</h4>
+            <p><strong>Ingredients:</strong><br>{{ recipe.ingredients }}</p>
+            <p><strong>Instructions:</strong><br>{{ recipe.instructions }}</p>
+            <small>Added on {{ moment(recipe.timestamp).format('LLL') }}</small>
+        </td>
+    </tr>
+</table>
