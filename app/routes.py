@@ -6,6 +6,17 @@ from app.forms import LoginForm, RegistrationForm, RecipeForm, ResetPasswordRequ
 from app.models import User, Recipe
 from app.email import send_password_reset_email
 from urllib.parse import urlsplit
+from jinja2 import pass_context
+from markupsafe import Markup, escape
+import re
+
+# Custom nl2br filter
+@app.template_filter('nl2br')
+def nl2br(value):
+    """Convert newlines in text to <br> tags for HTML rendering."""
+    _newline_re = re.compile(r'(?:\r\n|\r|\n)+')
+    result = u'<br>'.join(escape(line) for line in _newline_re.split(value))
+    return Markup(result)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -104,3 +115,12 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+@app.route('/recipe/<int:recipe_id>')
+@login_required
+def recipe(recipe_id):
+    recipe = db.session.get(Recipe, recipe_id)
+    if recipe is None or recipe.author != current_user:
+        flash("Recipe not found or you don't have access to it.")
+        return redirect(url_for('index'))
+    return render_template('recipe.html', title=recipe.name, recipe=recipe)

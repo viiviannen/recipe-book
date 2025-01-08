@@ -2,9 +2,13 @@
 <table>
     <tr valign="top">
         <td>
-            <h4>{{ recipe.name }}</h4>
-            <p><strong>Ingredients:</strong><br>{{ recipe.ingredients }}</p>
-            <p><strong>Instructions:</strong><br>{{ recipe.instructions }}</p>
+            {% if show_link %}
+                <h4><a href="{{ url_for('recipe', recipe_id=recipe.id) }}">{{ recipe.name }}</a></h4>
+            {% else %}
+                <h4>{{ recipe.name }}</h4>
+            {% endif %}
+            <p><strong>Ingredients:</strong><br>{{ recipe.ingredients | nl2br }}</p>
+            <p><strong>Instructions:</strong><br>{{ recipe.instructions| nl2br }}</p>
             <small>Added on {{ moment(recipe.timestamp).format('LLL') }}</small>
         </td>
     </tr>

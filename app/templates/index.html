@@ -30,6 +30,7 @@
     </form>
     <h3>Your most recent added recipes:</h3>
     {% for recipe in recipes %}
+        {% set show_link = True %}
         {% include '_recipe.html' %}
     {% endfor %}
 {% endblock %}
