@@ -151,3 +151,21 @@ def edit_recipe(recipe_id):
 
     # Pass the form and set the editing flag
     return render_template('recipe.html', title=f"Edit {recipe.name}", recipe=recipe, form=form, editing=True)
+
+@app.route('/delete_recipe/<int:recipe_id>', methods=['GET'])
+@login_required
+def delete_recipe(recipe_id):
+    # Find the recipe
+    recipe = Recipe.query.get_or_404(recipe_id)
+
+    # Check if the current user is the owner of the recipe
+    if recipe.user_id != current_user.id:
+        flash('You can only delete your own recipes.', 'warning')
+        return redirect(url_for('index'))
+
+    # Delete the recipe
+    db.session.delete(recipe)
+    db.session.commit()
+
+    flash('Recipe deleted successfully!', 'success')
+    return redirect(url_for('index'))
