@@ -13,7 +13,7 @@ import re
 # Custom nl2br filter
 @app.template_filter('nl2br')
 def nl2br(value):
-    """Convert newlines in text to <br> tags for HTML rendering."""
+    # Convert newlines in text to <br> tags for HTML rendering
     _newline_re = re.compile(r'(?:\r\n|\r|\n)+')
     result = u'<br>'.join(escape(line) for line in _newline_re.split(value))
     return Markup(result)
@@ -22,14 +22,20 @@ def nl2br(value):
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    form = RecipeForm()
+    #print(f"Current user: {current_user}, ID: {current_user.id}")
+    form = RecipeForm(mode="add")
     if form.validate_on_submit():
+        #print(f"Form submitted, Recipe Name: {form.name.data}, Ingredients: {form.ingredients.data}, Instructions: {form.instructions.data}")
+        #print(f"Current user during form submit: {current_user}, ID: {current_user.id}")
+        
         recipe = Recipe(
             name=form.name.data, 
             ingredients=form.ingredients.data,
             instructions=form.instructions.data,
-            author=current_user
+            user_id=current_user.id
             )
+        #print(f"Recipe to be added: {recipe}, User ID: {recipe.user_id}")
+        
         db.session.add(recipe)
         db.session.commit()
         flash('Recipe added!')
@@ -124,3 +130,24 @@ def recipe(recipe_id):
         flash("Recipe not found or you don't have access to it.")
         return redirect(url_for('index'))
     return render_template('recipe.html', title=recipe.name, recipe=recipe)
+
+@app.route('/recipe/<int:recipe_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_recipe(recipe_id):
+    recipe = db.session.get(Recipe, recipe_id)
+    if recipe is None or recipe.author != current_user:
+        flash("Recipe not found or you don't have access to it.")
+        return redirect(url_for('index'))
+
+    form = RecipeForm(mode="edit", obj=recipe)  # Pre-populate the form with existing data
+
+    if form.validate_on_submit():
+        recipe.name = form.name.data
+        recipe.ingredients = form.ingredients.data
+        recipe.instructions = form.instructions.data
+        db.session.commit()
+        flash("Recipe updated!")
+        return redirect(url_for('recipe', recipe_id=recipe.id))
+
+    # Pass the form and set the editing flag
+    return render_template('recipe.html', title=f"Edit {recipe.name}", recipe=recipe, form=form, editing=True)

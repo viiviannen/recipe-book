@@ -1,8 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% set show_link = False %}
-    {% include "_recipe.html" %}
-        <a href="">Edit Recipe</a>
-        <a href="">Delete Recipe</a>
+{% if editing %}
+<!-- Edit Form -->
+<h2>Edit Recipe</h2>
+<form action="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(size=32) }}<br>
+        {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.ingredients.label }}<br>
+        {{ form.ingredients(cols=32, rows=4) }}<br>
+        {% for error in form.ingredients.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.instructions.label }}<br>
+        {{ form.instructions(cols=32, rows=4) }}<br>
+        {% for error in form.instructions.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% else %}
+<!-- Include the recipe display -->
+{% set show_link = False %}
+{% include "_recipe.html" %}
+<a href="{{ url_for('edit_recipe', recipe_id=recipe.id) }}">Edit Recipe</a>
+<a href="">Delete Recipe</a>
+{% endif %}
 {% endblock %}

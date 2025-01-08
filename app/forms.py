@@ -38,7 +38,16 @@ class RecipeForm(FlaskForm):
     name = StringField('Recipe Name', validators=[DataRequired(), Length(max=128)])
     ingredients = TextAreaField('Ingredients', validators=[DataRequired()])
     instructions = TextAreaField('Instructions', validators=[DataRequired()])
-    submit = SubmitField('Add Recipe')
+    submit = SubmitField()
+
+    def __init__(self, mode=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if mode == "add":
+            self.submit.label.text = "Add Recipe"
+        elif mode == "edit":
+            self.submit.label.text = "Edit Recipe"
+        else:
+            self.submit.label.text = "Submit"  # Default for neutral cases
 
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
