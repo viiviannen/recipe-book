@@ -1,0 +1,145 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between; /* Ensures brand on the left and links on the right */
+    align-items: center;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between; /* Key for alignment */
+    align-items: center; /* Centers items vertically */
+    width: 100%;
+}
+
+.navbar .brand {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar .nav-links {
+    display: flex;
+    gap: 15px; /* Adds space between links */
+}
+
+.navbar .nav-links a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar .nav-links a:hover {
+    text-decoration: underline;
+}
+/* Flash Messages */
+.flash-messages {
+    margin: 20px auto;
+    max-width: 90%;
+    padding: 10px;
+    background-color: #eaf4f4;
+    border-left: 5px solid #4caf50;
+    border-radius: 5px;
+    color: #333;
+}
+
+.flash-messages ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.flash-messages li {
+    padding: 5px 0;
+}
+
+/* Main Content */
+main.content {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 90%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Flexbox layout for index content */
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align sections to the top */
+    gap: 20px; /* Add space between the form and recent recipes */
+    margin-top: 20px;
+}
+
+.form-section, .recent-recipes {
+    flex: 1; /* Allows sections to take up equal width */
+    min-width: 300px; /* Ensures sections don't shrink too much */
+}
+
+.recent-recipes {
+    max-width: 50%; /* Optional: Limit the width of the recipes section */
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    /* Adjust Navbar for smaller screens */
+    .navbar .container {
+        flex-direction: column; /* Stacks brand and links */
+        align-items: flex-start; /* Aligns to the left */
+    }
+
+    .navbar .nav-links {
+        flex-direction: column; /* Stacks the links vertically */
+        gap: 10px;
+    }
+
+    .navbar .brand {
+        margin-bottom: 10px; /* Adds space between brand and links */
+    }
+
+    /* Adjust Flash Messages */
+    .flash-messages {
+        max-width: 100%;
+    }
+
+    /* Adjust Content Area */
+    main.content {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .content-wrapper {
+        flex-direction: column; /* Stack form and recipes vertically */
+    }
+
+    .form-section, .recent-recipes {
+        max-width: 100%; /* Take full width on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Further adjustments for very small screens */
+    .navbar .brand {
+        font-size: 1em;
+    }
+
+    .navbar .nav-links {
+        gap: 5px;
+    }
+
+    main.content {
+        padding: 10px;
+    }
+}
